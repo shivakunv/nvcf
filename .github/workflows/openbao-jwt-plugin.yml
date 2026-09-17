@@ -18,12 +18,12 @@ name: openbao-jwt-plugin
 
 on:
   push:
-    branches: [main]
+    branches: [main-no]
     paths:
       - 'infra/openbao/**'
       - '.github/workflows/openbao-jwt-plugin.yml'
   pull_request:
-    branches: [main]
+    branches: [main-no]
     paths:
       - 'infra/openbao/**'
       - '.github/workflows/openbao-jwt-plugin.yml'

@@ -5,9 +5,9 @@ name: byoo-otel-collector
 
 on:
   push:
-    branches: [main]
+    branches: [main-no]
   pull_request:
-    branches: [main]
+    branches: [main-no]
   merge_group:
     types: [checks_requested]
   workflow_dispatch:

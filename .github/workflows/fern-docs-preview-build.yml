@@ -29,6 +29,7 @@ name: "Preview Fern Docs: Build"
 
 on:
   pull_request:
+    branches: [main-no]
     paths:
       - 'docs/**'
       - 'fern/**'

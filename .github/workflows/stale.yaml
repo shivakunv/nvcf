@@ -4,8 +4,9 @@
 name: Stale issues
 
 on:
-  schedule:
-    - cron: "20 8 * * *"
+  # Disabled for fork testing: only Renovate should run automatically here.
+  # schedule:
+  #   - cron: "20 8 * * *"
   workflow_dispatch:
 
 permissions:

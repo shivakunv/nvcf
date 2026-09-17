@@ -6,7 +6,7 @@ name: release-tags
 on:
   push:
     branches:
-      - main
+      - main-no
     tags:
       - '*-v*'
       - '**/v*'

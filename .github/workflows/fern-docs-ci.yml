@@ -19,6 +19,7 @@ name: Fern Docs CI
 
 on:
   pull_request:
+    branches: [main-no]
     paths:
       - 'docs/**'
       - 'fern/**'

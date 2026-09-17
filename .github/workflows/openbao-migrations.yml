@@ -14,12 +14,12 @@ name: openbao-migrations
 
 on:
   push:
-    branches: [main]
+    branches: [main-no]
     paths:
       - 'migrations/openbao/**'
       - '.github/workflows/openbao-migrations.yml'
   pull_request:
-    branches: [main]
+    branches: [main-no]
     paths:
       - 'migrations/openbao/**'
       - '.github/workflows/openbao-migrations.yml'

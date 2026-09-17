@@ -23,6 +23,7 @@ on:
   # pull_request_target) is used, so untrusted code never runs with secrets.
   pull_request:
     types: [labeled, synchronize, reopened]
+    branches: [main-no]
   workflow_dispatch:
     inputs:
       service_path:

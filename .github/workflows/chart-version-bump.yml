@@ -17,8 +17,9 @@
 name: chart version bump
 
 on:
-  release:
-    types: [published]
+  # Disabled for fork testing: only Renovate should run automatically here.
+  # release:
+  #   types: [published]
   # Manual entry point for re-running a release whose bump did not land, and
   # for exercising the job without cutting a tag.
   workflow_dispatch:
