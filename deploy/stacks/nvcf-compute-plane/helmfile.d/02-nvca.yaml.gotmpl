@@ -179,9 +179,8 @@ helmDefaults:
 releases:
 
   - name: nvca-operator
-    # Compute-plane base values pin the operator image and NVCA application
-    # versions. The chart appVersion remains the operator image fallback when
-    # no imageTag override is set.
+    # The chart appVersion owns the operator image version. Compute-plane base
+    # values own the NVCA application version used by this stack.
     chart: nvcf/helm-nvca-operator
     version: 1.28.0
     namespace: nvca-operator
