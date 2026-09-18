@@ -13,7 +13,8 @@
   "ignorePaths": [
     "**/vendor/**",
     "src/compute-plane-services/ess-agent/**",
-    "infra/openbao/plugins/vault-plugin-secrets-jwt/**"
+    "infra/openbao/plugins/vault-plugin-secrets-jwt/**",
+    "src/compute-plane-services/image-credential-helper/**"
   ],
   "labels": ["dependencies"],
   "packageRules": [
