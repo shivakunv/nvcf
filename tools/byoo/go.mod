@@ -1,9 +1,9 @@
 module byoo
 
-go 1.25.0
+go 1.26.0
 
 require (
-	github.com/NVIDIA/nvcf/src/libraries/go/lib v0.0.0-20260909200940-19c20e004ec9
+	github.com/NVIDIA/nvcf/src/libraries/go/lib v0.0.0-20260919004556-7f28ae8c7368
 	gopkg.in/yaml.v3 v3.0.1
 )
 
