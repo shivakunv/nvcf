@@ -14,7 +14,8 @@
     "**/vendor/**",
     "src/compute-plane-services/ess-agent/**",
     "infra/openbao/plugins/vault-plugin-secrets-jwt/**",
-    "src/compute-plane-services/image-credential-helper/**"
+    "src/compute-plane-services/image-credential-helper/**",
+    "src/libraries/go/lib/**"
   ],
   "labels": ["dependencies"],
   "packageRules": [
