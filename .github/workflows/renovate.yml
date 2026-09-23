@@ -1,13 +1,18 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
-# Uses the built-in GITHUB_TOKEN, not a separate PAT. Two consequences:
-# - GITHUB_TOKEN cannot open or update PRs that touch .github/workflows/**,
-#   so the github-actions manager is deliberately left out of
-#   .github/renovate.json's enabledManagers (gomod only).
-# - PRs GITHUB_TOKEN opens land in an approval-required state for their own
-#   workflow runs (anti-recursion protection), so a maintainer needs to
-#   approve each Renovate PR's checks manually.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 name: Renovate
 
 on:
@@ -29,12 +34,11 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Run Renovate
-        uses: renovatebot/github-action@dcfba84a42d1b5d5e49bf131b1bf53511851a123 # v46.3.1
+        uses: renovatebot/github-action@9fea9f0fbf80401026d11d03911d62b1f70fef1f # v46.3.3
         with:
           configurationFile: .github/renovate.json
+          renovate-version: "44.108.2"
         env:
           RENOVATE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RENOVATE_REPOSITORIES: '["shivakunv/nvcf"]'
           RENOVATE_ONBOARDING: false
-          RENOVATE_REPOSITORY_CACHE: reset
-          LOG_LEVEL: debug
