@@ -42,3 +42,5 @@ jobs:
           RENOVATE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RENOVATE_REPOSITORIES: '["shivakunv/nvcf"]'
           RENOVATE_ONBOARDING: false
+          RENOVATE_REPOSITORY_CACHE: reset
+          LOG_LEVEL: debug
