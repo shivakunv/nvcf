@@ -17,8 +17,6 @@ name: Renovate
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 9 * * *" # every day at 9:00 AM UTC
 
 permissions:
   contents: read
@@ -29,6 +27,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      statuses: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
