@@ -1365,8 +1365,20 @@ func (r *Reconciler) handleLease(ctx context.Context,
 		lease.Spec.RenewTime = &metav1.MicroTime{Time: now}
 		lease.Spec.AcquireTime = &metav1.MicroTime{Time: now}
 		if err := r.Client.Create(ctx, lease); err != nil {
-			log.Error(err, "Failed to create lease")
-			return reconcile.Result{}, false, err
+			if !apierrors.IsNotFound(err) {
+				log.Error(err, "Failed to create lease")
+				return reconcile.Result{}, false, err
+			}
+			// NotFound on a create means the init namespace itself is missing;
+			// nothing else creates it, so create it and retry once.
+			if nsErr := r.Client.Create(ctx, NewModelCacheInitNamespace()); nsErr != nil && !apierrors.IsAlreadyExists(nsErr) {
+				log.Error(nsErr, "Failed to create the model cache init namespace")
+				return reconcile.Result{}, false, nsErr
+			}
+			if err := r.Client.Create(ctx, lease); err != nil {
+				log.Error(err, "Failed to create lease")
+				return reconcile.Result{}, false, err
+			}
 		}
 		return reconcile.Result{}, true, nil
 	default:

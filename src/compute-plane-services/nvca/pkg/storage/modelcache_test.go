@@ -59,6 +59,57 @@ import (
 	"github.com/dsx-ai-factory/nvcf/src/compute-plane-services/nvca/pkg/types"
 )
 
+// nsEnforcingClient rejects creating a namespaced object whose namespace does
+// not exist, the way the API server does (`namespaces "<ns>" not found`). The
+// fake client does not model that on its own.
+type nsEnforcingClient struct {
+	client.Client
+}
+
+func (c nsEnforcingClient) Create(ctx context.Context, obj client.Object, opts ...client.CreateOption) error {
+	if ns := obj.GetNamespace(); ns != "" {
+		err := c.Client.Get(ctx, client.ObjectKey{Name: ns}, &corev1.Namespace{})
+		if apierrors.IsNotFound(err) {
+			return apierrors.NewNotFound(corev1.Resource("namespaces"), ns)
+		}
+		if err != nil {
+			return err
+		}
+	}
+	return c.Client.Create(ctx, obj, opts...)
+}
+
+// nvbugs#7055457: the model cache init lease lives in a namespace nothing else
+// creates, so on clusters without it the create failed forever with
+// `namespaces "nvca-modelcache-init" not found` and no model cache ever started.
+func TestHandleLease_CreatesMissingInitNamespace(t *testing.T) {
+	ctx := context.Background()
+	c := nsEnforcingClient{Client: fake.NewClientBuilder().WithScheme(mgrScheme).Build()}
+
+	r := &Reconciler{Client: c, nowFunc: time.Now}
+
+	const cacheHandle = "abc123handle"
+	st := &nvcav1new.StorageRequest{}
+	st.Spec.ICMSRequestName = "icms-request-0"
+	st.Spec.ModelCache = &nvcav1new.ModelCacheSpec{CacheHandle: cacheHandle}
+
+	_, holdsLease, err := r.handleLease(ctx, newInitLease(st))
+	require.NoError(t, err)
+	assert.True(t, holdsLease)
+
+	err = c.Get(ctx, client.ObjectKey{Name: ModelCacheInitNamespace}, &corev1.Namespace{})
+	require.NoError(t, err)
+
+	gotLease := &coordv1.Lease{}
+	err = c.Get(ctx, client.ObjectKey{
+		Namespace: ModelCacheInitNamespace,
+		Name:      buildInitLeaseName(cacheHandle),
+	}, gotLease)
+	require.NoError(t, err)
+	require.NotNil(t, gotLease.Spec.HolderIdentity)
+	assert.Equal(t, st.Spec.ICMSRequestName, *gotLease.Spec.HolderIdentity)
+}
+
 func TestReconcile_ModelCache(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	t.Cleanup(cancel)
